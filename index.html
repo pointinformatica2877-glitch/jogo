@@ -37,8 +37,10 @@
         canvas {
             image-rendering: pixelated;
             image-rendering: crisp-edges;
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
         }
 
@@ -60,51 +62,50 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-between h-screen w-screen max-h-screen max-w-screen p-1 sm:p-4 select-none overflow-hidden bg-black">
+<body class="flex flex-col items-center justify-between h-[100svh] w-screen p-1 sm:p-2 select-none overflow-hidden bg-black fixed inset-0">
 
     <!-- Game Header -->
-    <div class="w-full max-w-4xl flex justify-between items-center py-1 px-2 text-[10px] sm:text-sm bg-gray-900 border-b border-gray-800 rounded-t shrink-0">
-        <div class="text-yellow-400 font-bold tracking-wider">FOGE LADRÃOZINHO</div>
-        <div class="flex gap-2 sm:gap-4">
+    <div class="w-full max-w-4xl flex justify-between items-center py-1 px-2 text-[9px] sm:text-xs bg-gray-900 border-b border-gray-800 rounded-t shrink-0 h-7">
+        <div class="text-yellow-400 font-bold tracking-wider truncate">FOGE LADRÃOZINHO</div>
+        <div class="flex gap-2 sm:gap-4 shrink-0">
             <span id="scoreDisplay" class="text-white">SCORE: 00000</span>
-            <span id="highScoreDisplay" class="text-green-400">HI: 00000</span>
+            <span id="highScoreDisplay" class="text-green-400 hidden sm:inline">HI: 00000</span>
             <span id="levelDisplay" class="text-cyan-400">FASE: 1</span>
         </div>
     </div>
 
     <!-- Main Game Container -->
-    <div class="relative w-full max-w-4xl flex-1 crt-overlay border-2 sm:border-4 border-gray-700 rounded-b shadow-2xl bg-black overflow-hidden flex items-center justify-center min-h-0">
+    <div class="relative w-full max-w-4xl flex-1 crt-overlay border-2 sm:border-4 border-gray-700 rounded-b shadow-2xl bg-black overflow-hidden flex items-center justify-center min-h-0 min-w-0">
         <canvas id="gameCanvas" width="800" height="480" class="block"></canvas>
 
         <!-- UI Overlay Screens -->
-        <div id="startScreen" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-3 text-center z-20 overflow-y-auto">
-            <h1 class="text-xl sm:text-4xl text-yellow-400 mb-2 sm:mb-4 tracking-wider leading-relaxed">FOGE<br><span class="text-red-500">LADRÃOZINHO</span></h1>
-            <p class="text-[9px] sm:text-xs text-gray-300 mb-4 max-w-lg leading-relaxed text-left">
+        <div id="startScreen" class="absolute inset-0 bg-black/95 flex flex-col items-center justify-center p-3 text-center z-20 overflow-y-auto">
+            <h1 class="text-lg sm:text-3xl text-yellow-400 mb-2 tracking-wider leading-relaxed">FOGE<br><span class="text-red-500">LADRÃOZINHO</span></h1>
+            <p class="text-[9px] sm:text-xs text-gray-300 mb-3 max-w-lg leading-relaxed text-left">
                 • Pegue o saco de dinheiro no topo!<br>
-                • 🪜 <b>Escadas</b>: Use Cima/Baixo para subir/descer!<br>
-                • 🚪 Sair pela ESQUERDA: Sobe andar! | DIREITA: Desce andar!<br>
-                • 🕳 <b>Cuidado com Buracos</b>: Fazem você cair de andar!<br>
-                • 🐕 <b>Cães de Guarda & Câmeras</b>: Deixam você LENTO!<br>
-                • 🏙 <b>Dia / Noite</b>: O cenário muda a cada 3 níveis!<br>
-                • 👮 Policiais, Tiros e Guardas com Escudo nas fases avançadas!
+                • 🪜 <b>Escadas</b>: Seta Cima/Baixo!<br>
+                • 🚪 Sair ESQUERDA: Sobe! | DIREITA: Desce!<br>
+                • 🕳 <b>Buracos</b>: Caem de andar!<br>
+                • 🐕 <b>Cães & Câmeras</b>: Deixam LENTO!<br>
+                • 🏙 <b>Dia / Noite</b>: A cada 3 níveis!
             </p>
-            <button id="startBtn" class="btn-retro px-5 py-2.5 text-xs sm:text-base cursor-pointer rounded">INICIAR JOGO</button>
-            <p class="text-[9px] text-gray-500 mt-3">Controles: Setas / WASD / Touch</p>
+            <button id="startBtn" class="btn-retro px-4 py-2 text-xs sm:text-base cursor-pointer rounded">INICIAR JOGO</button>
+            <p class="text-[8px] text-gray-500 mt-2">Controles: Setas / WASD / Touch</p>
         </div>
 
         <div id="gameOverScreen" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-4 text-center z-20 hidden">
-            <h2 class="text-2xl sm:text-3xl text-red-600 mb-2">PRESO!</h2>
-            <p id="finalScoreText" class="text-xs sm:text-sm text-white mb-6">PONTUAÇÃO FINAL: 00000</p>
-            <button id="restartBtn" class="btn-retro px-6 py-3 text-xs sm:text-sm cursor-pointer rounded">JOGAR NOVAMENTE</button>
+            <h2 class="text-xl sm:text-3xl text-red-600 mb-2">PRESO!</h2>
+            <p id="finalScoreText" class="text-xs text-white mb-4">PONTUAÇÃO FINAL: 00000</p>
+            <button id="restartBtn" class="btn-retro px-5 py-2.5 text-xs cursor-pointer rounded">JOGAR NOVAMENTE</button>
         </div>
     </div>
 
-    <!-- Mobile Controls (Optimized for Small Screens) -->
-    <div class="w-full max-w-4xl py-1 grid grid-cols-4 gap-1.5 px-1 shrink-0 sm:hidden">
-        <button id="btnLeft" class="touch-btn bg-gray-800 border-2 border-gray-600 active:bg-gray-700 text-white py-2.5 rounded-lg text-lg font-bold flex items-center justify-center">◀</button>
-        <button id="btnDown" class="touch-btn bg-blue-600 border-2 border-blue-400 active:bg-blue-500 text-white py-2.5 rounded-lg text-[9px] font-bold flex items-center justify-center">DESCER ⬇</button>
-        <button id="btnJump" class="touch-btn bg-yellow-600 border-2 border-yellow-400 active:bg-yellow-500 text-white py-2.5 rounded-lg text-[9px] font-bold flex items-center justify-center">SUBIR/PULAR ⬆</button>
-        <button id="btnRight" class="touch-btn bg-gray-800 border-2 border-gray-600 active:bg-gray-700 text-white py-3 rounded-lg text-lg font-bold flex items-center justify-center">▶</button>
+    <!-- Mobile Controls (Fixed & Guaranteed Visible on Small Screens) -->
+    <div class="w-full max-w-4xl py-1 grid grid-cols-4 gap-1 px-1 shrink-0 h-14 sm:hidden">
+        <button id="btnLeft" class="touch-btn bg-gray-800 border-2 border-gray-600 active:bg-gray-700 text-white rounded-lg text-base font-bold flex items-center justify-center h-full">◀</button>
+        <button id="btnDown" class="touch-btn bg-blue-600 border-2 border-blue-400 active:bg-blue-500 text-white rounded-lg text-[8px] font-bold flex items-center justify-center h-full text-center leading-tight">DESCER<br>⬇</button>
+        <button id="btnJump" class="touch-btn bg-yellow-600 border-2 border-yellow-400 active:bg-yellow-500 text-white rounded-lg text-[8px] font-bold flex items-center justify-center h-full text-center leading-tight">SUBIR/PULAR<br>⬆</button>
+        <button id="btnRight" class="touch-btn bg-gray-800 border-2 border-gray-600 active:bg-gray-700 text-white rounded-lg text-base font-bold flex items-center justify-center h-full">▶</button>
     </div>
 
     <!-- Audio Synth & Game Engine -->
@@ -507,7 +508,7 @@
                 this.x = CANVAS_WIDTH / 2;
                 this.floor = floor;
                 this.y = floorsY[floor] - this.height;
-                this.speed = 2.0;
+                this.speed = 2.2;
                 this.dir = 1;
                 this.vy = 0;
                 this.isGrounded = true;
@@ -520,7 +521,7 @@
                 this.x = CANVAS_WIDTH / 2;
                 this.floor = spawnFloor;
                 this.y = floorsY[spawnFloor] - this.height;
-                this.speed = 2.0 + (level * 0.15);
+                this.speed = 2.0 + (level * 0.25);
                 this.shootCooldown = 0;
                 this.vy = 0;
                 this.isGrounded = true;
